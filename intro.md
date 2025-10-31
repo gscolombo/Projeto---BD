@@ -7,7 +7,7 @@
 ## Introdução
 
 
-## Especificação
+## Especificação do sistema
 
 O objetivo do sistema é possibilitar o gerenciamento da frota de ônibus do Distrito Federal por um administrador do governo. A frota de ônibus é fornecida por empresas de transporte público. Cada empresa é identificada por um CNPJ e possui razão social, nome fantasia, o local da sede e um ou mais funcionários, veículos e linhas de ônibus.
 
@@ -21,6 +21,17 @@ Toda ocorrência pode ser uma avaria ou um acidente. Cada avaria possui descriç
 Uma linha de ônibus faz parte de somente uma empresa e é identificada por um código. Cada linha está associada a um itinerário, que consiste em um local de origem, um local de destino e uma sequência de pontos de parada, que é um local com uma posição específica na sequência. Um local possui e é identificado por uma coordenada geográfica, representada pela latitude e longitude, e pode possuir um nome e/ou descrição.
 
 Por fim, toda viagem possui um horário de partida, de chegada, tempo de duração estimado e um motorista, cobrador, linha de ônibus e veículo que fazem parte da mesma empresa. Logo, uma viagem só pode estar associada a uma empresa.
+<br><br><br>
 
+## Modelo Conceitual
+Abaixo, é apresentado o modelo conceitual com base na especificação. O nome de relacionamentos deve ser interpretado da esquerda para a direita ou de cima para baixo, com prevalência do primeiro caso. Por exemplo, para a relação entre **Linha** e **Local**, lê-se 
+```text
+1 Linha compõem o itinerário de N Local
+```
 
+Buscou-se utilizar a mesma notação do livro *Fundamentals of Database Systems*, do Navathe. O programa para confecção do modelo foi o aplicativo *web* [drawio](https://www.drawio.com/).<br>
+Para facilitar a visualização, a imagem também pode ser acessada pelo [navegador](https://raw.githubusercontent.com/gscolombo/Projeto---BD/refs/heads/main/drawio/conceptual_model.drawio.svg).
 
+![image](./drawio/conceptual_model.drawio.svg)
+
+Um dos pontos principais do modelo acima é a relação entre **Local** e **Linha**, representada por um itinerário. Como especificado, toda linha de ônibus é um código que referencia uma sequência de pontos de parada do ônibus. Por exemplo, a linha `0.110` da viação (empresa) Piracicabana aponta somente para um itinerário, que também pode ser referenciado por outra linha de outra empresa. O itinerário em si consiste somente de de uma sequẽncia de locais, isto é, um ou mais locais ordenados. Nesse caso, para manter a generalidade da entidade **Local**, o atributo que define onde o local está posicionado na sequência foi incluído na relação entre **Local** e **Linha**, visto que só possui significado quando se refere a um itinerário.
