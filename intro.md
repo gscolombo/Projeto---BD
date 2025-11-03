@@ -40,3 +40,8 @@ Para facilitar a visualização, a imagem também pode ser acessada pelo [navega
 ![image](./drawio/conceptual_model.drawio.svg)
 
 Um dos pontos principais do modelo acima é a relação entre **Local** e **Linha**, representada por um itinerário. Como especificado, toda linha de ônibus é um código que referencia uma sequência de pontos de parada do ônibus. Por exemplo, a linha `0.110` da viação (empresa) Piracicabana aponta somente para um itinerário, que também pode ser referenciado por outra linha de outra empresa. O itinerário em si consiste somente de de uma sequẽncia de locais, isto é, um ou mais locais ordenados. Nesse caso, para manter a generalidade da entidade **Local**, o atributo que define onde o local está posicionado na sequência foi incluído na relação entre **Local** e **Linha**, visto que só possui significado quando se refere a um itinerário.
+
+## Modelo Relacional
+Abaixo é apresentado o modelo relacional com base no modelo conceitual elaborado. Foi utilizado o aplicativo *web* [dbdiagram](https://dbdiagram.io/home/) para sua criação. Esse aplicativo também permite a geração de uma documentação para o banco de dados, que pode ser acessada [aqui](https://dbdocs.io/gscolombo404/Projeto-BD).
+
+![image](./images/Projeto_BD.png)
