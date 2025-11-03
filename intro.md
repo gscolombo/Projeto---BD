@@ -49,4 +49,4 @@ Abaixo é apresentado o modelo relacional com base no modelo conceitual elaborad
 ## Geração do banco de dados
 Com base no modelo relacional elaborado, o *script* SQL abaixo foi utilizado para gerar o banco de dados. Além dos comandos para criação das tabelas, também há a criação dos tipos `ENUM` para algumas das colunas. Ao final do *script*, tambeḿ foram criados dois *triggers* para checar se os funcionários a serem cadastrados nas tabelas `Motorista` e `Viagem` possuem o cargo esperado, como definido na especificação.
 
-<script src="./sql/create_db.sql"></script>
+https://github.com/gscolombo/Projeto---BD/blob/090541af0b5aa2a2b7361a8a4816f12c5048f003/sql/create_db.sql
