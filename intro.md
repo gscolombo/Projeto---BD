@@ -45,3 +45,8 @@ Um dos pontos principais do modelo acima é a relação entre **Local** e **Linh
 Abaixo é apresentado o modelo relacional com base no modelo conceitual elaborado. Foi utilizado o aplicativo *web* [dbdiagram](https://dbdiagram.io/home/) para sua criação. Esse aplicativo também permite a geração de uma documentação para o banco de dados, que pode ser acessada [aqui](https://dbdocs.io/gscolombo404/Projeto-BD).
 
 ![image](./images/Projeto_BD.png)
+
+## Geração do banco de dados
+Com base no modelo relacional elaborado, o *script* SQL abaixo foi utilizado para gerar o banco de dados. Além dos comandos para criação das tabelas, também há a criação dos tipos `ENUM` para algumas das colunas. Ao final do *script*, tambeḿ foram criados dois *triggers* para checar se os funcionários a serem cadastrados nas tabelas `Motorista` e `Viagem` possuem o cargo esperado, como definido na especificação.
+
+<script src="./sql/create_db.sql"></script>
