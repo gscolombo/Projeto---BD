@@ -2,6 +2,7 @@
 ### Bancos de Dados - 2025/2 - Universidade de Brasília
 #### Integrantes:
 - Gabriel de Souza Colombo - 222014062
+- Eduardo de Paula Carvalho - 251039175
 <br>
 
 ## Introdução
@@ -27,6 +28,7 @@ Toda manutenção veicular possui uma data, hora e 1 ou mais serviços realizado
 >Uma linha de ônibus faz parte de somente uma empresa e é identificada por um código. Cada linha está associada a um itinerário, que consiste em um local de origem, um local de destino e uma sequência de pontos de parada, que é um local com uma posição específica na sequência. Um local possui e é identificado por uma coordenada geográfica, representada pela latitude e longitude, e pode possuir um nome e/ou descrição.
 >
 >Por fim, toda viagem possui um horário de partida, de chegada, tempo de duração estimado e um motorista, cobrador, linha de ônibus e veículo que fazem parte da mesma empresa. Logo, uma viagem só pode estar associada a uma empresa.
+
 ---
 ## Modelo Conceitual
 Abaixo, é apresentado o modelo conceitual com base na especificação. O nome de relacionamentos deve ser interpretado da esquerda para a direita ou de cima para baixo, com prevalência do primeiro caso. Por exemplo, para a relação entre **Linha** e **Local**, lê-se 
