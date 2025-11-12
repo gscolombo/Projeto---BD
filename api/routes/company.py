@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from repositories.company import *
 
-router = APIRouter(prefix="/empresa", tags=["empresa"])
+router = APIRouter(prefix="/empresa", tags=["Empresa"])
 
 @router.get("/")
 def get_company():
