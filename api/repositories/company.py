@@ -1,0 +1,50 @@
+from sqlmodel import Session, select, or_
+
+from db.engine import engine
+from db.models import Empresa
+
+
+def get_company_data() -> list:
+    with Session(engine) as session:
+        stmt = select(Empresa)
+        results = session.exec(stmt)
+
+        return [  # Append associated data
+            {
+                **dict(e),
+                "funcionarios": [{
+                    **dict(f),
+                    "telefones": [t.telefone for t in f.telefones]
+
+                } for f in e.funcionarios],
+                "veiculos": [{
+                    **dict(v),
+                    "ocorrencias": [o for o in v.ocorrencias]
+
+                } for v in e.veiculos],
+                "linhas": e.linhas
+            }
+            for e in results
+        ]
+
+
+def find_company(cnpj: str = None, company_name: str = None, trade_name: str = None) -> dict | None:
+    with Session(engine) as session:
+        stmt = select(Empresa).where(or_(Empresa.cnpj == cnpj,
+                                         Empresa.razao_social == company_name,
+                                         Empresa.nome_fantasia == trade_name))
+        result = session.exec(stmt).fetchall()
+
+        if (len(result)):  # Append associated data
+            return [
+                {
+                    **dict(e),
+                    "funcionarios": [{
+                        **dict(f),
+                        "telefones": [t.telefone for t in f.telefones]
+
+                    } for f in e.funcionarios],
+                    "veiculos": e.veiculos,
+                }
+                for e in result
+            ]
