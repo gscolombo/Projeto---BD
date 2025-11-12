@@ -56,8 +56,10 @@ class Telefone_Funcionario(SQLModel, table=True):
 
 
 class Funcionario(SQLModel, table=True):
-    cnpj_empresa: str | None = Field(
-        default=None, nullable=False, foreign_key='empresa.cnpj')
+    cnpj_empresa: str | None = Field(default=None,
+                                     nullable=False,
+                                     foreign_key='empresa.cnpj',
+                                     sa_column_kwargs={"onupdate": "CASCADE"})
     codigo: int | None = Field(default=None, primary_key=True)
     nome: str
     sexo: str | None = None
@@ -73,8 +75,9 @@ class Funcionario(SQLModel, table=True):
 
 class Motorista(SQLModel, table=True):
     cnh: str = Field(primary_key=True, max_length=9)
-    codigo_funcionario: int = Field(
-        unique=True, foreign_key="funcionario.codigo", ondelete="CASCADE")
+    codigo_funcionario: int = Field(unique=True,
+                                    foreign_key="funcionario.codigo",
+                                    ondelete="CASCADE")
     status_cnh: StatusCNH
     data_validade_cnh: date
 
@@ -87,17 +90,18 @@ class Categoria(SQLModel, table=True):
 
 class Modelo(SQLModel, table=True):
     codigo: int = Field(primary_key=True)
-    codigo_categoria: int | None = Field(
-        default=None, nullable=False, foreign_key="categoria.codigo")
+    codigo_categoria: int | None = Field(default=None,
+                                         nullable=False,
+                                         foreign_key="categoria.codigo")
     nome: str = Field(unique=True)
 
 
 class Veiculo(SQLModel, table=True):
     placa: str = Field(primary_key=True, max_length=7)
-    cnpj_empresa: str | None = Field(
-        nullable=False, foreign_key="empresa.cnpj")
-    codigo_modelo: int | None = Field(
-        nullable=False, foreign_key="modelo.codigo")
+    cnpj_empresa: str | None = Field(nullable=False,
+                                     foreign_key="empresa.cnpj")
+    codigo_modelo: int | None = Field(nullable=False,
+                                      foreign_key="modelo.codigo")
     km: float | None = None
     ano_fabricacao: int | None = None
 
@@ -106,8 +110,10 @@ class Veiculo(SQLModel, table=True):
 
 
 class Manutencao(SQLModel, table=True):
-    id: int | None = Field(sa_column=Column(
-        BigInteger, Identity(always=True), default=None, primary_key=True))
+    id: int | None = Field(sa_column=Column(BigInteger,
+                                            Identity(always=True),
+                                            default=None,
+                                            primary_key=True))
     placa_veiculo: str = Field(foreign_key="veiculo.placa", sa_column_kwargs={
                                "onupdate": "CASCADE"})
     data_hora: datetime
@@ -121,15 +127,19 @@ class Servico(SQLModel, table=True):
 
 
 class Manutencao_Servico(SQLModel, table=True):
-    id_manutencao: int | None = Field(
-        default=None, foreign_key="manutencao.id", primary_key=True)
-    codigo_servico: int | None = Field(
-        default=None, foreign_key="servico.codigo", primary_key=True)
+    id_manutencao: int | None = Field(default=None,
+                                      foreign_key="manutencao.id",
+                                      primary_key=True)
+    codigo_servico: int | None = Field(default=None,
+                                       foreign_key="servico.codigo",
+                                       primary_key=True)
 
 
 class Ocorrencia(SQLModel, table=True):
-    id: int | None = Field(sa_column=Column(
-        Integer, Identity(always=True), primary_key=True, default=None))
+    id: int | None = Field(sa_column=Column(Integer,
+                                            Identity(always=True),
+                                            primary_key=True,
+                                            default=None))
     placa_veiculo: str = Field(foreign_key="veiculo.placa")
     data_hora: datetime
     lat_local: float
@@ -142,8 +152,8 @@ class Ocorrencia(SQLModel, table=True):
 
 
 class Acidente(SQLModel, table=True):
-    id_ocorrencia: int | None = Field(
-        foreign_key="ocorrencia.id", primary_key=True)
+    id_ocorrencia: int | None = Field(foreign_key="ocorrencia.id",
+                                      primary_key=True)
     descricao: str | None = None
     gravidade: Grau
     numero_feridos: int | None = None
@@ -151,8 +161,8 @@ class Acidente(SQLModel, table=True):
 
 
 class Avaria(SQLModel, table=True):
-    id_ocorrencia: int | None = Field(
-        foreign_key="ocorrencia.id", primary_key=True)
+    id_ocorrencia: int | None = Field(foreign_key="ocorrencia.id",
+                                      primary_key=True)
     descricao: str | None = None
     nivel_dano: Grau
     total: bool = False
@@ -166,8 +176,10 @@ class Linha(SQLModel, table=True):
 
 
 class Itinerario(SQLModel, table=True):
-    codigo_linha: str = Field(foreign_key="linha.codigo", ondelete="CASCADE", sa_column_kwargs={
-                              "onupdate": "CASCADE"}, primary_key=True)
+    codigo_linha: str = Field(foreign_key="linha.codigo",
+                              ondelete="CASCADE",
+                              sa_column_kwargs={"onupdate": "CASCADE"},
+                              primary_key=True)
     lat_local: float = Field(primary_key=True)
     lng_local: float = Field(primary_key=True)
     numero: int = Field(primary_key=True)
@@ -179,10 +191,10 @@ class Itinerario(SQLModel, table=True):
 
 class Viagem(SQLModel, table=True):
     codigo_linha: str = Field(primary_key=True, foreign_key="linha.codigo")
-    codigo_cobrador: int = Field(
-        primary_key=True, foreign_key="funcionario.codigo")
-    codigo_motorista: int = Field(
-        primary_key=True, foreign_key="funcionario.codigo")
+    codigo_cobrador: int = Field(primary_key=True,
+                                 foreign_key="funcionario.codigo")
+    codigo_motorista: int = Field(primary_key=True,
+                                  foreign_key="funcionario.codigo")
     placa_veiculo: str = Field(primary_key=True, foreign_key="veiculo.placa")
     data: date = Field(primary_key=True)
     hora_partida: datetime = Field(primary_key=True)

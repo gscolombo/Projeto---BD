@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS Funcionario (
   data_nascimento date,
   data_contratacao date NOT NULL,
   data_demissao date,
-  FOREIGN KEY (cnpj_empresa) REFERENCES Empresa (cnpj)
+  FOREIGN KEY (cnpj_empresa) REFERENCES Empresa (cnpj) ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Telefone_Funcionario (
