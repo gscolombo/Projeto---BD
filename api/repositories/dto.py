@@ -19,3 +19,9 @@ class EmpresaDTO(SQLModel):
     nome_fantasia: str | None = None
     lat_local: float | None = None
     lng_local: float | None = None
+
+class LocalDTO(SQLModel):
+    lat: float | None = None
+    lng: float | None = None
+    nome: str | None = None
+    descricao: str | None = None

@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from routes import company, worker
+from routes import company, worker, local
 from routes.exception import CustomHTTPException
 
 app = FastAPI()
@@ -18,3 +18,4 @@ async def custom_exception_handler(req: Request, exc: CustomHTTPException):
 
 app.include_router(company.router)
 app.include_router(worker.router)
+app.include_router(local.router)
