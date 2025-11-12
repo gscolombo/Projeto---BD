@@ -45,6 +45,7 @@ def find_worker_by_name(name: str) -> dict | None:
                 for f in results
             ]
 
+
 def create_worker(worker: Funcionario) -> int:
     with Session(engine) as session:
         session.add(worker)
@@ -53,9 +54,10 @@ def create_worker(worker: Funcionario) -> int:
 
         return worker.codigo
 
+
 def update_worker(codigo: int, worker: FuncionarioDTO) -> Funcionario | None:
     with Session(engine) as session:
-        w = session.get(Funcionario, codigo)    
+        w = session.get(Funcionario, codigo)
         if w:
             worker_data = worker.model_dump(exclude_unset=True)
             w.sqlmodel_update(worker_data)
@@ -63,3 +65,12 @@ def update_worker(codigo: int, worker: FuncionarioDTO) -> Funcionario | None:
             session.commit()
             session.refresh(w)
             return w
+
+
+def remove_worker(codigo: int):
+    with Session(engine) as session:
+        w = session.get(Funcionario, codigo)
+        if w:
+            session.delete(w)
+            session.commit()
+            return True

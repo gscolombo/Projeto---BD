@@ -39,3 +39,11 @@ def put_worker(codigo: int, worker: FuncionarioDTO):
     if w:
         return w
     raise HTTPException(status_code=404, detail="Funcionário não encontrado.")
+
+
+@router.delete("/{codigo}")
+def delete_worker(codigo: int):
+    ok = remove_worker(codigo)
+    if ok:
+        return {"ok": ok}
+    raise HTTPException(status_code=404, detail="Funcionário não encontrado.")
