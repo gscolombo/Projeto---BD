@@ -3,6 +3,8 @@ from sqlmodel import Session, select, or_
 from db.engine import engine
 from db.models import Empresa
 
+from repositories.dto import EmpresaDTO
+
 
 def get_company_data() -> list:
     with Session(engine) as session:
@@ -56,3 +58,14 @@ def create_company(company: Empresa) -> str:
         session.commit()
 
         return company.cnpj
+
+def update_company(cnpj: str, company: EmpresaDTO) -> Empresa | None:
+    with Session(engine) as session:
+        c = session.get(Empresa, cnpj)
+        if c:
+            company_data = company.model_dump(exclude_unset=True)
+            c.sqlmodel_update(company_data)
+            session.add(c)
+            session.commit()
+            session.refresh(c)
+            return c

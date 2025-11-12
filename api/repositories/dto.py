@@ -11,3 +11,11 @@ class FuncionarioDTO(SQLModel):
     data_nascimento: date | None = None
     data_contratacao: date | None = None
     data_demissao: date | None = None
+
+
+class EmpresaDTO(SQLModel):
+    cnpj: str | None = None
+    razao_social: str | None = None
+    nome_fantasia: str | None = None
+    lat_local: float | None = None
+    lng_local: float | None = None
