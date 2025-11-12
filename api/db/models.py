@@ -58,8 +58,7 @@ class Telefone_Funcionario(SQLModel, table=True):
 class Funcionario(SQLModel, table=True):
     cnpj_empresa: str | None = Field(
         default=None, nullable=False, foreign_key='empresa.cnpj')
-    codigo: int | None = Field(sa_column=Column(
-        BigInteger, Identity(always=True), default=None, primary_key=True))
+    codigo: int | None = Field(default=None, primary_key=True)
     nome: str
     sexo: str | None = None
     cargo: Cargo

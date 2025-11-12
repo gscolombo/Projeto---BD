@@ -2,6 +2,7 @@ from sqlmodel import Session, select
 
 from db.engine import engine
 from db.models import Funcionario
+from repositories.dto import FuncionarioDTO
 
 
 def list_workers() -> list:
@@ -21,8 +22,7 @@ def list_workers() -> list:
 
 def find_worker_by_id(codigo: int) -> dict | None:
     with Session(engine) as session:
-        stmt = select(Funcionario).where(Funcionario.codigo == codigo)
-        f = session.exec(stmt).first()
+        f = session.get(Funcionario, codigo)
 
         if (f):  # Include telephones
             df = dict(f)
@@ -44,3 +44,22 @@ def find_worker_by_name(name: str) -> dict | None:
                 }
                 for f in results
             ]
+
+def create_worker(worker: Funcionario) -> int:
+    with Session(engine) as session:
+        session.add(worker)
+        session.commit()
+        session.refresh(worker)
+
+        return worker.codigo
+
+def update_worker(codigo: int, worker: FuncionarioDTO) -> Funcionario | None:
+    with Session(engine) as session:
+        w = session.get(Funcionario, codigo)    
+        if w:
+            worker_data = worker.model_dump(exclude_unset=True)
+            w.sqlmodel_update(worker_data)
+            session.add(w)
+            session.commit()
+            session.refresh(w)
+            return w
