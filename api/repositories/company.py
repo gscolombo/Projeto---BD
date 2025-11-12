@@ -48,3 +48,11 @@ def find_company(cnpj: str = None, company_name: str = None, trade_name: str = N
                 }
                 for e in result
             ]
+
+
+def create_company(company: Empresa) -> str:
+    with Session(engine) as session:
+        session.add(company)
+        session.commit()
+
+        return company.cnpj
