@@ -59,6 +59,7 @@ def create_company(company: Empresa) -> str:
 
         return company.cnpj
 
+
 def update_company(cnpj: str, company: EmpresaDTO) -> Empresa | None:
     with Session(engine) as session:
         c = session.get(Empresa, cnpj)
@@ -69,3 +70,12 @@ def update_company(cnpj: str, company: EmpresaDTO) -> Empresa | None:
             session.commit()
             session.refresh(c)
             return c
+
+
+def remove_company(cnpj: str) -> bool | None:
+    with Session(engine) as session:
+        w = session.get(Empresa, cnpj)
+        if w:
+            session.delete(w)
+            session.commit()
+            return True

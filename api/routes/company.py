@@ -41,3 +41,14 @@ def put_company(cnpj: str, company: EmpresaDTO):
     except Exception as e:
         raise CustomHTTPException(
             400, "Erro durante processamento de consulta", str(e))
+
+
+@router.delete("")
+def delete_company(cnpj: str):
+    try:
+        if not remove_company(cnpj):
+            raise HTTPException(
+                status_code=404, detail="Empresa não encontrada")
+    except Exception as e:
+        raise CustomHTTPException(
+            400, "Erro durante processamento de consulta", str(e))
