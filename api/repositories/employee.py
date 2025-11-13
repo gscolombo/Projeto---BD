@@ -5,7 +5,7 @@ from db.models import Funcionario
 from repositories.dto import FuncionarioDTO
 
 
-def list_workers() -> list:
+def list_employees() -> list:
     with Session(engine) as session:
         stmt = select(Funcionario)
 
@@ -13,14 +13,14 @@ def list_workers() -> list:
 
         return [
             {
-                **f.__dict__,
+                **dict(f),
                 "telefones": [t.telefone for t in f.telefones]
             }
             for f in results
         ]
 
 
-def find_worker_by_id(codigo: int) -> dict | None:
+def find_employee_by_id(codigo: int) -> dict | None:
     with Session(engine) as session:
         f = session.get(Funcionario, codigo)
 
@@ -31,43 +31,43 @@ def find_worker_by_id(codigo: int) -> dict | None:
             return df
 
 
-def find_worker_by_name(name: str) -> dict | None:
+def find_employee_by_name(name: str) -> list | None:
     with Session(engine) as session:
-        stmt = select(Funcionario).where(Funcionario.nome.like(f"%{name}%"))
+        stmt = select(Funcionario).where(Funcionario.nome.like(f"%{name}%")) # type: ignore
 
         results = session.exec(stmt).fetchall()
         if (len(results)):
             return [
                 {
-                    **f.__dict__,
+                    **dict(f),
                     "telefones": [t.telefone for t in f.telefones]
                 }
                 for f in results
             ]
 
 
-def create_worker(worker: Funcionario) -> int:
+def create_employee(employee: Funcionario) -> int:
     with Session(engine) as session:
-        session.add(worker)
+        session.add(employee)
         session.commit()
-        session.refresh(worker)
+        session.refresh(employee)
 
-        return worker.codigo
+        return employee.codigo
 
 
-def update_worker(codigo: int, worker: FuncionarioDTO) -> Funcionario | None:
+def update_employee(codigo: int, employee: FuncionarioDTO) -> Funcionario | None:
     with Session(engine) as session:
         w = session.get(Funcionario, codigo)
         if w:
-            worker_data = worker.model_dump(exclude_unset=True)
-            w.sqlmodel_update(worker_data)
+            employee_data = employee.model_dump(exclude_unset=True)
+            w.sqlmodel_update(employee_data)
             session.add(w)
             session.commit()
             session.refresh(w)
             return w
 
 
-def remove_worker(codigo: int):
+def remove_employee(codigo: int):
     with Session(engine) as session:
         w = session.get(Funcionario, codigo)
         if w:

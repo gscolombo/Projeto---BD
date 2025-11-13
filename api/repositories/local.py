@@ -10,7 +10,7 @@ def find_all_locals() -> Sequence[Local]:
         return session.exec(select(Local)).fetchall()
 
 
-def find_locals_by(lat: str, lng: str, nome: str, descricao: str) -> Sequence[Local]:
+def find_locals_by(lat: str | None, lng: str | None, nome: str | None, descricao: str | None) -> Sequence[Local]:
     with Session(engine) as session:
         stmt = select(Local) \
             .where(or_(Local.lat == lat,
@@ -30,9 +30,19 @@ def create_local(local: Local) -> tuple[float]:
 
 def update_local(lat: str, lng: str, local: LocalDTO) -> Local:
     with Session(engine) as session:
-        pass
-
+        l = session.get(Local, (float(lat), float(lng)))
+        if l:
+            local_data = local.model_dump(exclude_unset=True)
+            l.sqlmodel_update(local_data)
+            session.add(l)
+            session.commit()
+            session.refresh(l)
+            return l
 
 def remove_local(lat: str, lng: str) -> bool | None:
     with Session(engine) as session:
-        pass
+        l = session.get(Local, (float(lat), float(lng)))
+        if l:
+            session.delete(l)
+            session.commit()
+            return True

@@ -11,8 +11,9 @@ router = APIRouter(prefix="/local", tags=["Local"])
 def get_all_locals():
     return find_all_locals()
 
+
 @router.get("/searchby")
-def get_locals(lat: str = None, lng: str = None, nome: str = None, descricao: str = None):
+def get_locals(lat: str | None = None, lng: str | None = None, nome: str | None = None, descricao: str | None = None):
     return find_locals_by(lat, lng, nome, descricao)
 
 
@@ -31,7 +32,8 @@ def put_local(lat: str, lng: str, local: LocalDTO):
     try:
         l = update_local(lat, lng, local)
         if not l:
-            raise HTTPException(status_code=404, detail="Local não encontrado.")
+            raise HTTPException(
+                status_code=404, detail="Local não encontrado.")
         return l
     except Exception as e:
         raise CustomHTTPException(
