@@ -6,20 +6,20 @@ from sqlmodel import (Field, SQLModel, ForeignKeyConstraint,
 
 
 class Cargo(Enum):
-    Fiscal = 1,
-    Motorista = 2,
+    Fiscal = 1
+    Motorista = 2
     Cobrador = 3
 
 
 class StatusCNH(Enum):
-    Valida = 1,
-    Vencida = 2,
+    Valida = 1
+    Vencida = 2
     Suspensa = 3
 
 
 class Grau(Enum):
-    Level = 1,
-    Moderado = 2,
+    Leve = 1
+    Moderado = 2
     Grave = 3
 
 
