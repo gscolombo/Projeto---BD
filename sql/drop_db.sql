@@ -1,0 +1,17 @@
+DROP TABLE viagem;
+DROP TABLE itinerario;
+DROP TABLE linha;
+DROP TABLE avaria;
+DROP TABLE acidente;
+DROP TABLE ocorrencia;
+DROP TABLE manutencao_servico;
+DROP TABLE servico;
+DROP TABLE manutencao;
+DROP TABLE veiculo;
+DROP TABLE modelo;
+DROP TABLE categoria;
+DROP TABLE motorista;
+DROP TABLE telefone_funcionario;
+DROP TABLE funcionario;
+DROP TABLE empresa;
+DROP TABLE local;
