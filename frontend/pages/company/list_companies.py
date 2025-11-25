@@ -45,10 +45,9 @@ if companies:
                 company_map = create_interactive_map(
                     center=[company['lat_local'], company['lng_local']],
                     zoom_start=15,
-                    marker_location=[
-                        company['lat_local'], company['lng_local']]
+                    marker_locations=[(company['lat_local'], company['lng_local'])]
                 )
-                st_folium(company_map, use_container_width=True, height=400)
+                st_folium(company_map, use_container_width=True, key=company['cnpj'], height=400)
 
 
 else:
