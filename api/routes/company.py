@@ -52,3 +52,15 @@ def delete_company(cnpj: str):
     except Exception as e:
         raise CustomHTTPException(
             400, "Erro durante processamento de consulta", str(e))
+
+
+@router.post("/extended")
+def post_company_extended(data: NewCompanyData):
+    try:
+        save_new_company(data)
+        return {"cnpj": data.cnpj,
+                "funcionarios_criados": len(data.employees),
+                "veiculos_criados": len(data.vehicles)}
+    except Exception as e:
+        raise CustomHTTPException(
+            400, "Erro durante processamento de consulta", str(e))
