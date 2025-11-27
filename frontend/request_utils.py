@@ -81,3 +81,7 @@ def get_models():
 def create_driver(motorista_data):
     """Create new driver"""
     return make_request("POST", "/motorista", json=motorista_data)
+
+def call_save_new_company(company_data):
+    """Call "save_new_company" procedure"""
+    return make_request("POST", "/empresa/extended", json=company_data)

@@ -11,12 +11,7 @@ def add_employee():
         "data_nascimento": None,
         "data_contratacao": None,
         "telefones": [],
-        "is_motorista": False,
-        "motorista_data": {
-            "cnh": "",
-            "status_cnh": None,
-            "data_validade_cnh": None
-        }
+        "motorista_data": None
     })
 
 
@@ -58,23 +53,29 @@ def employees_section():
                                                0 if emp["sexo"] == "M" else 1),
                                            placeholder="Selecione uma opção",
                                            key=f"emp_sexo_{i}")
+                
+                role_options = ["Fiscal", "Motorista", "Cobrador"]
                 emp["cargo"] = st.selectbox("Cargo",
-                                            ["Fiscal", "Cobrador", "Motorista"],
-                                            index=None,
+                                            role_options,
+                                            index=None if not emp["cargo"] else role_options.index(emp["cargo"]),
                                             placeholder="Selecione uma opção",
                                             key=f"emp_cargo_{i}")
 
             with col_emp2:
-                emp["data_nascimento"] = st.date_input("Data de Nascimento",
-                                                       value=emp["data_nascimento"],
-                                                       min_value=datetime.today() - timedelta(days=365 * 101),
-                                                       max_value="today",
-                                                       key=f"emp_nasc_{i}")
-                emp["data_contratacao"] = st.date_input("Data de Contratação",
-                                                        value=emp["data_contratacao"],
-                                                        min_value=datetime(1950, month=1, day=1),
-                                                        max_value="today",
-                                                        key=f"emp_contratacao_{i}")
+
+                birth_date = st.date_input("Data de Nascimento",
+                                           value=emp["data_nascimento"],
+                                           min_value=datetime.today() - timedelta(days=365 * 101),
+                                           max_value="today",
+                                           key=f"emp_nasc_{i}")
+                hiring_date = st.date_input("Data de Contratação",
+                                            value=emp["data_contratacao"],
+                                            min_value=datetime(1950, month=1, day=1),
+                                            max_value="today",
+                                            key=f"emp_contratacao_{i}")
+
+                emp["data_nascimento"] = birth_date.strftime("%Y-%m-%d") if birth_date else None
+                emp["data_contratacao"] = hiring_date.strftime("%Y-%m-%d") if hiring_date else None
 
             # Phone numbers
             st.write("Telefones:")
@@ -105,16 +106,19 @@ def employees_section():
                                                                  key=f"cnh_{i}")
 
                 with col_mot2:
+                    status_options = ["Válida", "Vencida", "Suspensa"]
                     emp["motorista_data"]["status_cnh"] = st.selectbox("Status CNH",
-                                                                       ["Válida", "Vencida",
-                                                                           "Suspensa"],
-                                                                       index=None,
+                                                                       status_options,
+                                                                       index=None if not emp["motorista_data"]["status_cnh"]
+                                                                                else status_options.index(emp["motorista_data"]["status_cnh"]),
                                                                        placeholder="Selecione uma opção",
                                                                        key=f"status_cnh_{i}")
 
-                emp["motorista_data"]["data_validade_cnh"] = st.date_input("Data de Validade CNH",
-                                                                           value=emp["motorista_data"]["data_validade_cnh"],
-                                                                           key=f"validade_cnh_{i}")
+                due_date = st.date_input("Data de Validade CNH",
+                                         value=emp["motorista_data"]["data_validade_cnh"],
+                                         key=f"validade_cnh_{i}")
+
+                emp["motorista_data"]["data_validade_cnh"] = due_date.strftime("%Y-%m-%d") if due_date else None
 
             st.button("❌ Remover Funcionário", key=f"remove_emp_{i}",
                       on_click=remove_employee, args=(i,))

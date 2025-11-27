@@ -31,8 +31,7 @@ if "disable_local" not in st.session_state:
 st.subheader("Cadastrar Nova Empresa")
 
 # Company and Location Section
-col1, col2 = st.columns(2, vertical_alignment="top")
-
+col1, col2 = st.columns(2, vertical_alignment="top", border=True)
 
 with col2:
     location_map()

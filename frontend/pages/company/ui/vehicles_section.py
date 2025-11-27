@@ -44,8 +44,9 @@ def vehicles_section():
                                                  value=vehicle["placa"],
                                                  max_chars=7,
                                                  key=f"placa_{i}")
-                vehicle["codigo_modelo"] = st.selectbox("Modelo", [m["codigo"] for m in models],
-                                                        index=None,
+                model_codes = [m["codigo"] for m in models]
+                vehicle["codigo_modelo"] = st.selectbox("Modelo", model_codes,
+                                                        index=None if not vehicle["codigo_modelo"] else model_codes.index(vehicle["codigo_modelo"]),
                                                         placeholder="Selecione um modelo",
                                                         format_func=lambda i: [m["nome"] for m in models if m["codigo"] == i][0],
                                                         key=f"modelo_{i}")
