@@ -61,7 +61,6 @@ def get_locations():
     """Get all locations"""
     return make_request("GET", "/local")
 
-
 def create_location(location_data):
     """Create new location"""
     return make_request("POST", "/local", json=location_data)
@@ -85,3 +84,6 @@ def create_driver(motorista_data):
 def call_save_new_company(company_data):
     """Call "save_new_company" procedure"""
     return make_request("POST", "/empresa/extended", json=company_data)
+
+def delete_company(cnpj):
+    return make_request("DELETE", f"/empresa?cnpj={cnpj}")

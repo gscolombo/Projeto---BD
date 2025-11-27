@@ -76,11 +76,13 @@ def update_company(cnpj: str, company: EmpresaDTO) -> Empresa | None:
 
 def remove_company(cnpj: str) -> bool | None:
     with Session(engine) as session:
-        w = session.get(Empresa, cnpj)
-        if w:
-            session.delete(w)
+        try:
+            query = text("CALL delete_company(:cnpj)")
+            session.exec(query, params={"cnpj": cnpj})
             session.commit()
-            return True
+        except Exception as e:
+            session.rollback()
+            raise e
         
 # Procedures
 def save_new_company(data: NewCompanyData):

@@ -26,9 +26,7 @@ def save_company():
         "employees": st.session_state.employees,
         "vehicles": st.session_state.vehicles
     }
-    
-    print(new_company_data)
-    
+        
     result = call_save_new_company(new_company_data)
 
     if (result):
