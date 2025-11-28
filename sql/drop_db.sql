@@ -1,3 +1,7 @@
+DROP VIEW employee_stats;
+DROP VIEW employee_overview_by_company;
+DROP VIEW vehicle_overview_by_company;
+
 DROP TABLE viagem;
 DROP TABLE itinerario;
 DROP TABLE linha;
