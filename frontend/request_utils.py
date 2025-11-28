@@ -87,3 +87,6 @@ def call_save_new_company(company_data):
 
 def delete_company(cnpj):
     return make_request("DELETE", f"/empresa?cnpj={cnpj}")
+
+def get_employee_stats():
+    return make_request("GET", "/funcionario/view/employee_stats")

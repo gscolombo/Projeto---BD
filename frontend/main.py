@@ -14,7 +14,7 @@ if 'map_center' not in st.session_state:
 
 
 pages = {
-    "": [st.Page("pages/dashboard.py", title="📊 Dashboard", default=True)],
+    "": [st.Page("pages/dashboard/dashboard.py", title="📊 Dashboard", default=True)],
     "🏢 Empresas": [
         st.Page("pages/company/list_companies.py", title="Empresas cadastradas"),
         st.Page("pages/company/create_company.py", title="Cadastrar nova empresa")
