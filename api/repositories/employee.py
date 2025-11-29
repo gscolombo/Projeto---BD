@@ -2,6 +2,7 @@ from sqlmodel import Session, select
 
 from db.engine import engine
 from db.models import Funcionario
+from db.views import EmployeeOverviewByCompany, EmployeeStats
 from repositories.dto import FuncionarioDTO
 
 
@@ -33,7 +34,8 @@ def find_employee_by_id(codigo: int) -> dict | None:
 
 def find_employee_by_name(name: str) -> list | None:
     with Session(engine) as session:
-        stmt = select(Funcionario).where(Funcionario.nome.like(f"%{name}%")) # type: ignore
+        stmt = select(Funcionario).where(
+            Funcionario.nome.like(f"%{name}%"))  # type: ignore
 
         results = session.exec(stmt).fetchall()
         if (len(results)):
@@ -74,3 +76,13 @@ def remove_employee(codigo: int):
             session.delete(w)
             session.commit()
             return True
+
+
+def get_employee_overview_by_company_view():
+    with Session(engine) as session:
+        return [dict(result) for result in
+                session.exec(select(EmployeeOverviewByCompany)).fetchall()]
+
+def get_employee_stats_view():
+    with Session(engine) as session:
+        return [dict(result) for result in session.exec(select(EmployeeStats)).fetchall()]

@@ -2,12 +2,23 @@ import streamlit as st
 import pandas as pd
 from streamlit_folium import st_folium
 
-from request_utils import get_companies
+from request_utils import get_companies, delete_company
 from maps import create_interactive_map
 
 st.header("Empresas Cadastradas")
 
 companies = get_companies()
+
+@st.dialog("Tem certeza que deseja continuar?")
+def open_delete_dialog(cnpj):
+    st.write(
+        "Essa ação não pode ser desfeita. Registros associados também serão deletados.")
+
+    with st.container(horizontal_alignment="right"):
+        if st.button("Excluir empresa", type="primary"):
+            delete_company(cnpj)
+            st.rerun()
+
 
 if companies:
     # Display companies in an expandable format
@@ -21,15 +32,18 @@ if companies:
                 ''')
                 st.badge(f"**CNPJ**: {company['cnpj']}", color="gray")
 
-                emp_role = lambda c: "Fiscal" if c == 1 else ("Motorista" if c == 2 else "Cobrador")
+                def emp_role(c): return "Fiscal" if c == 1 else (
+                    "Motorista" if c == 2 else "Cobrador")
                 if company.get('funcionarios'):
                     st.markdown("##### Funcionários")
                     employees_df = pd.DataFrame([{
                         'Nome': func['nome'],
                         'Cargo': emp_role(func['cargo']),
-                        'Data Contratação': func['data_contratacao']
+                        'Data Contratação': func['data_contratacao'],
+                        'Data Demissão': func['data_demissao'],
                     } for func in company['funcionarios']])
-                    st.dataframe(employees_df, use_container_width=True, hide_index=True)
+                    st.dataframe(
+                        employees_df, use_container_width=True, hide_index=True)
 
                 if company.get("veiculos"):
                     st.markdown("##### Veículos")
@@ -38,18 +52,26 @@ if companies:
                         'Quilometragem': v['km'],
                         'Ano de fabricação': v['ano_fabricacao']
                     } for v in company['veiculos']])
-                    st.dataframe(vehicles_df, use_container_width=True, hide_index=True)
+                    st.dataframe(
+                        vehicles_df, use_container_width=True, hide_index=True)
 
             with col2:
+                col_btn1, col_btn2 = st.columns([3, 1])
+
+                with col_btn2:
+                    st.write("")
+                    st.button("🗑️ Excluir", key=f"delete_{company['cnpj']}",
+                              type="secondary", use_container_width=True, on_click=open_delete_dialog, args=(company["cnpj"],))
+
                 st.subheader("Local da sede")
                 company_map = create_interactive_map(
                     center=[company['lat_local'], company['lng_local']],
                     zoom_start=15,
-                    marker_location=[
-                        company['lat_local'], company['lng_local']]
+                    marker_locations=[
+                        (company['lat_local'], company['lng_local'])]
                 )
-                st_folium(company_map, use_container_width=True, height=400)
-
+                st_folium(company_map, use_container_width=True,
+                          key=company['cnpj'], height=400)
 
 else:
     st.info("Nenhuma empresa cadastrada.")
