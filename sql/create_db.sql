@@ -23,6 +23,22 @@ CREATE TABLE IF NOT EXISTS Local (
   PRIMARY KEY (lat, lng)
 );
 
+/* Criação da tabela para arquivos associados a locais */
+CREATE TABLE IF NOT EXISTS local_arquivo (
+  id_arquivo SERIAL PRIMARY KEY,        
+  id_local_lat FLOAT NOT NULL,          
+  id_local_lng FLOAT NOT NULL,          
+  nome_arquivo VARCHAR NOT NULL,        
+  tipo VARCHAR NOT NULL,                
+  tamanho INT,                          
+  conteudo BYTEA NOT NULL,              
+  data_upload TIMESTAMP DEFAULT NOW(),  
+  FOREIGN KEY (id_local_lat, id_local_lng) 
+    REFERENCES Local(lat, lng) 
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
 CREATE TABLE IF NOT EXISTS Empresa (
   cnpj char(14) PRIMARY KEY,
   razao_social varchar NOT NULL,
