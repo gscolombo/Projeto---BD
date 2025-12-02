@@ -1,4 +1,4 @@
--- CREATE OR REPLACE VIEW vehicle_overview_by_company AS
+CREATE OR REPLACE VIEW vehicle_overview_by_company AS
 SELECT
     e.cnpj,
     e.razao_social,
