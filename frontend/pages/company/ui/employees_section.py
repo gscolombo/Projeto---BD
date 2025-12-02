@@ -98,6 +98,13 @@ def employees_section():
             if emp["cargo"] == "Motorista":
                 st.subheader("Dados do Motorista")
                 col_mot1, col_mot2 = st.columns(2)
+                
+                # Initialize driver data dict
+                emp["motorista_data"] = {
+                    "cnh": None,
+                    "status_cnh": None,
+                    "data_validade_cnh": None
+                }
 
                 with col_mot1:
                     emp["motorista_data"]["cnh"] = st.text_input("CNH",
@@ -119,6 +126,10 @@ def employees_section():
                                          key=f"validade_cnh_{i}")
 
                 emp["motorista_data"]["data_validade_cnh"] = due_date.strftime("%Y-%m-%d") if due_date else None
+
+            else:
+                emp["motorista_data"] = None # Clear driver data dict
+
 
             st.button("❌ Remover Funcionário", key=f"remove_emp_{i}",
                       on_click=remove_employee, args=(i,))
