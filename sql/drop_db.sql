@@ -1,0 +1,21 @@
+DROP VIEW IF EXISTS employee_stats;
+DROP VIEW IF EXISTS employee_overview_by_company;
+DROP VIEW IF EXISTS vehicle_overview_by_company;
+
+DROP TABLE IF EXISTS viagem;
+DROP TABLE IF EXISTS itinerario;
+DROP TABLE IF EXISTS linha;
+DROP TABLE IF EXISTS avaria;
+DROP TABLE IF EXISTS acidente;
+DROP TABLE IF EXISTS ocorrencia;
+DROP TABLE IF EXISTS manutencao_servico;
+DROP TABLE IF EXISTS servico;
+DROP TABLE IF EXISTS manutencao;
+DROP TABLE IF EXISTS veiculo;
+DROP TABLE IF EXISTS modelo;
+DROP TABLE IF EXISTS categoria;
+DROP TABLE IF EXISTS motorista;
+DROP TABLE IF EXISTS telefone_funcionario;
+DROP TABLE IF EXISTS funcionario;
+DROP TABLE IF EXISTS empresa;
+DROP TABLE IF EXISTS local;

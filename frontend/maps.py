@@ -1,7 +1,7 @@
 import folium
 import streamlit as st
 
-def create_interactive_map(center=None, zoom_start=5, marker_location=None):
+def create_interactive_map(center=None, zoom_start=5, marker_locations=None, clickable=False):
     """Create a Folium map for location selection"""
     if center is None:
         center = st.session_state.map_center
@@ -10,19 +10,21 @@ def create_interactive_map(center=None, zoom_start=5, marker_location=None):
         location=center,
         zoom_start=zoom_start,
         control_scale=True,
-        tiles='OpenStreetMap'
+        tiles='OpenStreetMap',
     )
     
     # Add click event to get coordinates
-    m.add_child(folium.LatLngPopup())
+    if clickable:
+        m.add_child(folium.LatLngPopup())
     
     # Add marker if location is provided
-    if marker_location:
-        folium.Marker(
-            marker_location,
-            popup=f"Latitude: {marker_location[0]:.6f}\nLongitude: {marker_location[1]:.6f}",
-            tooltip="Clique para ver coordenadas",
-            icon=folium.Icon(color='red', icon='info-sign')
-        ).add_to(m)
+    if marker_locations:
+        for loc in marker_locations:
+            folium.Marker(
+                loc,
+                popup=f"Latitude: {loc[0]:.6f}\nLongitude: {loc[1]:.6f}",
+                tooltip="Clique para ver coordenadas",
+                icon=folium.Icon(color='red', icon='info-sign')
+            ).add_to(m)
     
     return m

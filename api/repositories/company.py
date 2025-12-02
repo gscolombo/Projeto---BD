@@ -1,7 +1,9 @@
-from sqlmodel import Session, select, or_
+from sqlmodel import Session, select, or_, text
+import json
 
 from db.engine import engine
 from db.models import Empresa
+from db.procedures import NewCompanyData
 
 from repositories.dto import EmpresaDTO
 
@@ -74,8 +76,44 @@ def update_company(cnpj: str, company: EmpresaDTO) -> Empresa | None:
 
 def remove_company(cnpj: str) -> bool | None:
     with Session(engine) as session:
-        w = session.get(Empresa, cnpj)
-        if w:
-            session.delete(w)
+        try:
+            query = text("CALL delete_company(:cnpj)")
+            session.exec(query, params={"cnpj": cnpj})
             session.commit()
-            return True
+        except Exception as e:
+            session.rollback()
+            raise e
+        
+# Procedures
+def save_new_company(data: NewCompanyData):
+    with Session(engine) as session:
+        try:
+            query = text("""CALL save_new_company(
+                            :cnpj,
+                            :razao_social,
+                            :nome_fantasia,
+                            :lat_local,
+                            :lng_local,
+                            :local_nome,
+                            :local_descricao,
+                            :employees,
+                            :vehicles
+                        );
+                        """)
+
+            session.exec(query, params={
+                "cnpj": data.cnpj,
+                "razao_social": data.razao_social,
+                "nome_fantasia": data.nome_fantasia,
+                "lat_local": data.lat_local,
+                "lng_local": data.lng_local,
+                "local_nome": data.local_nome,
+                "local_descricao": data.local_descricao,
+                "employees": json.dumps([e.model_dump() for e in data.employees]),
+                "vehicles": json.dumps([v.model_dump() for v in data.vehicles])
+            })
+
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e

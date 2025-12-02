@@ -1,6 +1,6 @@
 import streamlit as st
-import pandas as pd
 
+from pages.dashboard.employee_stats import show_employee_stats
 from request_utils import get_companies
 
 st.title("🏢 Sistema de gestão da frota de ônibus do Distrito Federal")
@@ -27,17 +27,6 @@ if companies:
         total_lines = sum(len(company.get('linhas', [])) for company in companies)
         st.metric("Total de Linhas", total_lines)
     
-    # Recent companies table
-    st.subheader("Empresas Cadastradas")
-    companies_df = pd.DataFrame([{
-        'CNPJ': company['cnpj'],
-        'Razão Social': company['razao_social'],
-        'Nome Fantasia': company.get('nome_fantasia', ''),
-        'Funcionários': len(company.get('funcionarios', [])),
-        'Veículos': len(company.get('veiculos', [])),
-        'Linhas': len(company.get('linhas', []))
-    } for company in companies])
-    
-    st.dataframe(companies_df, use_container_width=True)
+    show_employee_stats()
 else:
     st.info("Nenhuma empresa cadastrada.")
