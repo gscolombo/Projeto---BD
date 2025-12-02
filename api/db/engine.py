@@ -3,7 +3,7 @@ from sqlmodel import create_engine, SQLModel
 
 from dotenv import load_dotenv
 
-import db.models
+from . import models
 
 load_dotenv()
 
