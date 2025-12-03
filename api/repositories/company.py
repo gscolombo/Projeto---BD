@@ -66,7 +66,7 @@ def update_company(cnpj: str, company: EmpresaDTO) -> Empresa | None:
     with Session(engine) as session:
         c = session.get(Empresa, cnpj)
         if c:
-            company_data = company.model_dump(exclude_unset=True)
+            company_data = company.model_dump(exclude_unset=True, exclude_none=True)
             c.sqlmodel_update(company_data)
             session.add(c)
             session.commit()
