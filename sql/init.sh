@@ -13,6 +13,7 @@ base_path=$(dirname "${BASH_SOURCE[0]}")
 
 views_dir="$base_path/views"
 procedures_dir="$base_path/procedures"
+triggers_dir="$base_path/triggers"
 
 if [[ -d $views_dir ]]; then
     for file in "$views_dir"/*; do
@@ -24,6 +25,14 @@ fi
 
 if [[ -d $procedures_dir ]]; then
     for file in "$procedures_dir"/*; do
+        if [[ -f $file ]] && [[ $file == *.sql ]]; then 
+            PGPASSWORD=$password psql -d $db -U $username -c "\i $file"
+        fi
+    done
+fi
+
+if [[ -d $triggers_dir ]]; then
+    for file in "$triggers_dir"/*; do
         if [[ -f $file ]] && [[ $file == *.sql ]]; then 
             PGPASSWORD=$password psql -d $db -U $username -c "\i $file"
         fi
