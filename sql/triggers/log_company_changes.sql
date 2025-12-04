@@ -38,7 +38,7 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS empresa_changes_trigger ON empresa;
 
 CREATE TRIGGER empresa_changes_trigger
-AFTER INSERT OR UPDATE OR DELETE
+BEFORE INSERT OR UPDATE OR DELETE
 ON empresa
 FOR EACH ROW
 EXECUTE PROCEDURE log_empresa_changes_func();

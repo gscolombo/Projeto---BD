@@ -38,7 +38,7 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS funcionario_changes_trigger ON funcionario;
 
 CREATE TRIGGER employee_changes_trigger
-AFTER INSERT OR UPDATE OR DELETE
+BEFORE INSERT OR UPDATE OR DELETE
 ON funcionario
 FOR EACH ROW
 EXECUTE PROCEDURE log_funcionario_changes_func();
