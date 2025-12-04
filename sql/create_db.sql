@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS Ocorrencia (
   data_hora timestamp NOT NULL,
   lat_local float NOT NULL,
   lng_local float NOT NULL,
-  FOREIGN KEY (placa_veiculo) REFERENCES Veiculo (placa) ON DELETE CASCASDE,
+  FOREIGN KEY (placa_veiculo) REFERENCES Veiculo (placa) ON DELETE CASCADE,
   FOREIGN KEY (lat_local, lng_local) REFERENCES Local (lat, lng)
 );
 

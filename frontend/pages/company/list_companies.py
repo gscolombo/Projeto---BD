@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from streamlit_folium import st_folium
 
-from request_utils import get_companies, delete_company
+from request_utils import get_companies, delete_company, update_company
 from maps import create_interactive_map
 
 st.header("Empresas Cadastradas")
@@ -20,6 +20,36 @@ def open_delete_dialog(cnpj):
             st.rerun()
 
 
+@st.dialog("Editar dados da empresa")
+def open_edit_dialog(company):
+    def submit_company_edit_form():
+        result = update_company(company["cnpj"], {
+            "cnpj": None,
+            "razao_social": st.session_state.get("razao_social"),
+            "nome_fantasia": st.session_state.get("nome_fantasia"),
+            "lat_local": None,
+            "lng_local": None
+        })
+        
+        st.session_state["company_edit_form_result"] = result
+
+    st.badge(f"**CNPJ**: {company['cnpj']}", color="gray")
+
+    with st.form("company_edit_form"):
+        st.text_input("Razão Social", value=company["razao_social"], key="razao_social")
+        st.text_input("Nome Fantasia", value=company["nome_fantasia"], key="nome_fantasia")
+
+        if st.form_submit_button("Salvar", on_click=submit_company_edit_form):
+            st.rerun()
+
+
+if "company_edit_form_result" in st.session_state:
+    result = st.session_state.company_edit_form_result
+    if result:
+        st.toast(f"Dados do CNPJ {result["cnpj"]} alterados com sucesso.")
+    del st.session_state.company_edit_form_result
+    
+    
 if companies:
     # Display companies in an expandable format
     for company in companies:
@@ -56,10 +86,12 @@ if companies:
                         vehicles_df, use_container_width=True, hide_index=True)
 
             with col2:
-                col_btn1, col_btn2 = st.columns([3, 1])
+                _, col_btn1, col_btn2 = st.columns([4, 1, 1])
 
+                with col_btn1:
+                    st.button("📝 Editar", key=f"edit_{company['cnpj']}",
+                              type="secondary", use_container_width=True, on_click=open_edit_dialog, args=(company,))
                 with col_btn2:
-                    st.write("")
                     st.button("🗑️ Excluir", key=f"delete_{company['cnpj']}",
                               type="secondary", use_container_width=True, on_click=open_delete_dialog, args=(company["cnpj"],))
 
