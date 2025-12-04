@@ -65,6 +65,10 @@ def create_location(location_data):
     """Create new location"""
     return make_request("POST", "/local", json=location_data)
 
+def upload_location_image(location_image_data):
+    """Upload location image"""
+    return make_request("POST", "/local/imagem", json=location_image_data)
+
 def create_employee(employee_data):
     """Create new employee"""
     return make_request("POST", "/funcionario", json=employee_data)

@@ -18,8 +18,12 @@ pages = {
     "🏢 Empresas": [
         st.Page("pages/company/list_companies.py", title="Empresas cadastradas"),
         st.Page("pages/company/create_company.py", title="Cadastrar nova empresa")
+    ],
+    "📍 Locais": [
+        st.Page("pages/local/upload_image.py", title="Upload de imagem para local")
     ]
 }
+
 
 pg = st.navigation(pages, position="top")
 pg.run()
