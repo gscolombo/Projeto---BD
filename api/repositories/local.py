@@ -1,7 +1,7 @@
 from sqlmodel import Session, select, or_, Sequence
 
 from db.engine import engine
-from db.models import Local
+from db.models import Local, LocalArquivo
 from repositories.dto import LocalDTO
 
 
@@ -46,3 +46,9 @@ def remove_local(lat: str, lng: str) -> bool | None:
             session.delete(l)
             session.commit()
             return True
+
+def upload_image(file: LocalArquivo):
+    with Session(engine) as session:
+        session.add(file)
+        session.commit()
+        return session.get(LocalArquivo, (file.local_lat, file.local_lng))

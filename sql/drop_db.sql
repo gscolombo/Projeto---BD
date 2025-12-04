@@ -18,4 +18,5 @@ DROP TABLE IF EXISTS motorista;
 DROP TABLE IF EXISTS telefone_funcionario;
 DROP TABLE IF EXISTS funcionario;
 DROP TABLE IF EXISTS empresa;
+DROP TABLE IF EXISTS local_arquivo;
 DROP TABLE IF EXISTS local;
