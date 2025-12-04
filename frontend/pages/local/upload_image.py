@@ -1,43 +1,53 @@
 import streamlit as st
-import psycopg2
+from request_utils import upload_location_image, get_locations
+from datetime import datetime
+from base64 import b64encode
+
+if "upload_image_result" not in st.session_state:
+    st.session_state.upload_image_result = None
+
+@st.cache_data
+def _get_locations():
+    return get_locations()
+    
 
 st.title("Upload de imagem para Local")
 
-uploaded_file = st.file_uploader("Carregar imagem", type=["png", "jpg", "jpeg"])
+if (result := st.session_state.upload_image_result):
+    st.success(f"Arquivo {result["nome_arquivo"]} salvo com sucesso!")
+    st.session_state.upload_image_result = None
+    st.session_state.location_selectbox = None
+    
 
-if uploaded_file is not None:
-    # Ler os bytes
-    bytes_data = uploaded_file.read()
+locations = _get_locations()
+st.selectbox("", options=locations, placeholder="Selecione um local",
+             format_func=lambda l: l["nome"], key="location_selectbox", index=None)
 
-    # Mostrar preview
-    st.image(bytes_data, caption="Preview")
+if (local := st.session_state.get("location_selectbox")):
+    uploaded_file = st.file_uploader(
+        "Carregar imagem", type=["png", "jpg", "jpeg"])
 
-    try:
-        conn = psycopg2.connect(
-            dbname="detran",
-            user="postgres",
-            password="12345",
-            host="localhost",
-            port="5432"
-        )
-        conn.set_client_encoding("UTF8")
-        cur = conn.cursor()
+    if uploaded_file is not None:
+        # Ler os bytes
+        bytes_data = uploaded_file.read()
 
-        cur.execute("""
-            INSERT INTO local_arquivo (lat, lng, nome_arquivo, tipo, tamanho, conteudo)
-            VALUES (%s, %s, %s, %s, %s, %s)
-        """, (
-            -15.7801,
-            -47.9292,            #lat e long fixo para teste
-            "algo.png",          # nome fixo para teste
-            "teste/png",         # tipo fixo para teste
-            len(bytes_data),
-            psycopg2.Binary(bytes_data)
-        ))
+        if len(bytes_data):
+            # Mostrar preview
+            st.image(bytes_data)
 
-        conn.commit()
-        cur.close()
-        conn.close()
-        st.success("Imagem salva no banco com sucesso!")
-    except Exception as e:
-        st.error(f"Erro ao salvar no banco: {e}")
+            # Dados para registro no banco de dados
+            local_image_data = {
+                "id_arquivo": None,
+                "local_lat": local["lat"],
+                "local_lng": local["lng"],
+                "nome_arquivo": uploaded_file.name,
+                "tipo": uploaded_file.type,
+                "tamanho": uploaded_file.size,
+                "conteudo": b64encode(bytes_data).decode("utf8"),
+                "data_upload": datetime.now().strftime("%Y-%m-%d")
+            }
+
+            if st.button("Enviar"):
+                st.session_state.upload_image_result = upload_location_image(local_image_data)
+                if st.session_state.upload_image_result:
+                    st.rerun()

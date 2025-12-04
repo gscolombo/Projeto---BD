@@ -1,7 +1,8 @@
 from enum import Enum
+from typing import List
 from datetime import date, datetime
 from sqlmodel import (Field, SQLModel, ForeignKeyConstraint,
-                      Identity, Column, BigInteger,
+                      Identity, Column, BigInteger, LargeBinary,
                       Integer, Relationship)
 
 
@@ -28,6 +29,22 @@ class Local(SQLModel, table=True):
     lng: float = Field(nullable=False, primary_key=True)
     nome: str | None = None
     descricao: str | None = None
+    
+class LocalArquivo(SQLModel, table=True):
+    __tablename__ = "local_arquivo"
+    
+    local_lat: float = Field(nullable=False, primary_key=True)
+    local_lng: float = Field(nullable=False, primary_key=True)
+    nome_arquivo: str
+    tipo: str
+    tamanho: int
+    conteudo: List[int] = Field(sa_column=Column(LargeBinary, nullable=False))
+    data_upload: datetime
+    
+    __table_args__ = ForeignKeyConstraint(["local_lat", "local_lng"],
+                                          ["local.lat", "local.lng"],
+                                          ondelete="CASCADE",
+                                          onupdate="CASCADE"),    
 
 
 class Empresa(SQLModel, table=True):

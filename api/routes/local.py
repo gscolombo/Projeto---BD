@@ -1,4 +1,6 @@
+from base64 import b64decode
 from fastapi import APIRouter, HTTPException
+
 
 from repositories.dto import LocalDTO
 from repositories.local import *
@@ -46,6 +48,17 @@ def put_local(lat: str, lng: str):
         if not remove_local(lat, lng):
             raise HTTPException(
                 status_code=404, detail="Local não encontrado.")
+    except Exception as e:
+        raise CustomHTTPException(
+            400, "Erro durante processamento de consulta", str(e))
+        
+@router.post("/imagem")
+def post_local_image(file: LocalArquivo):
+    try:
+        file.conteudo = b64decode(file.conteudo)
+        saved_file = upload_image(file)
+        print(saved_file.nome_arquivo)
+        return { "nome_arquivo": saved_file.nome_arquivo }
     except Exception as e:
         raise CustomHTTPException(
             400, "Erro durante processamento de consulta", str(e))

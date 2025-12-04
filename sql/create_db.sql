@@ -25,15 +25,15 @@ CREATE TABLE IF NOT EXISTS Local (
 
 /* Criação da tabela para arquivos associados a locais */
 CREATE TABLE IF NOT EXISTS local_arquivo (
-  id_arquivo SERIAL PRIMARY KEY,        
-  id_local_lat FLOAT NOT NULL,          
-  id_local_lng FLOAT NOT NULL,          
+  local_lat FLOAT NOT NULL,          
+  local_lng FLOAT NOT NULL,          
   nome_arquivo VARCHAR NOT NULL,        
   tipo VARCHAR NOT NULL,                
   tamanho INT,                          
   conteudo BYTEA NOT NULL,              
-  data_upload TIMESTAMP DEFAULT NOW(),  
-  FOREIGN KEY (id_local_lat, id_local_lng) 
+  data_upload TIMESTAMP DEFAULT NOW(),
+  PRIMARY KEY (local_lat, local_lng),
+  FOREIGN KEY (local_lat, local_lng) 
     REFERENCES Local(lat, lng) 
     ON DELETE CASCADE ON UPDATE CASCADE
 );
