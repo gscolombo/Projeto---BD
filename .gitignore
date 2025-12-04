@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-**pycache**
-*.env
-.vscode
-=======
 .env
 .vscode/
 __pycache__/
 *.pyc
->>>>>>> f8b2ca1 (chore: atualiza .gitignore para ignorar .env e .vscode)
