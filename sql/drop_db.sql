@@ -1,6 +1,7 @@
 DROP VIEW IF EXISTS employee_stats;
 DROP VIEW IF EXISTS employee_overview_by_company;
 DROP VIEW IF EXISTS vehicle_overview_by_company;
+DROP VIEW IF EXISTS local_overview;
 
 DROP TABLE IF EXISTS viagem;
 DROP TABLE IF EXISTS itinerario;
